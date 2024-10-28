@@ -33,6 +33,7 @@ class UserService {
             const token = generateToken(user);
 
             return{
+                token,
                 user:{
                     email:user.email,
                     name: user.firstname + ' '+ user.lastname

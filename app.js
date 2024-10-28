@@ -7,17 +7,18 @@ const taskRoute = require('./src/api/routes/tasks.route');
 
 const PORT = process.env.PORT;
 
-app.use(express.json()); 
+app.use(express.json());
 
 
 app.get("/", (req, res) => {
-  res.send("This is a new file with Mongo and text");
+    res.send("This is a new file with Mongo and text");
 });
 
-dbConnect();
+dbConnect().then(r => console.log("DB connected"));
 
 app.use('/api', taskRoute);
 
+
 app.listen(PORT, () => {
-  console.log(`Listening on port:${PORT} `);
+    console.log(`Listening on port:${PORT} `);
 });

@@ -21,6 +21,7 @@ class UserController {
             return res.status(201).json({
                 success: true,
                 message: 'Sign in successful',
+                token,
                 user
             })
         } catch (error) {
