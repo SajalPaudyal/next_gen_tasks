@@ -3,21 +3,23 @@ const userService = require("../../service/user.service");
 class UserController {
     async createUser(req, res) {
         try {
+            const {email, password} = req.body;
             const newUser = await userService.create(req.body)
             return res.status(201).json({
                 success: true,
                 message: 'User registered successfully',
-                data: newUser,
+                data: newUser
             });
         } catch (error) {
-            throw new Error(`Could not create a user`)
+            res.status(500).json({error: error.message});
 
         }
     }
 
     async signInUser(req, res) {
         try {
-            const { token, user } = await userService.signIn(req.body)
+
+            const {token, user} = await userService.signIn(req.body)
             return res.status(201).json({
                 success: true,
                 message: 'Sign in successful',
@@ -25,7 +27,7 @@ class UserController {
                 user
             })
         } catch (error) {
-            throw new Error(`Could not sign in the user`)
+            res.status(500).json({error: error.message});
         }
     }
 

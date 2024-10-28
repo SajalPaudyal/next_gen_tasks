@@ -4,6 +4,11 @@ const generateToken = require('../utils/generateTokens')
 
 class UserService {
     async create(userData) {
+        const {email} = userData;
+        let user = await usersModel.findOne({email});
+        if(user){
+            throw new Error("User Exists")
+        }
         try {
             const saltRound = 10;
             const hashedPassword = await bcrypt.hash(userData.password, saltRound);
@@ -35,8 +40,7 @@ class UserService {
             return{
                 token,
                 user:{
-                    email:user.email,
-                    name: user.firstname + ' '+ user.lastname
+                    email
                 }
             }
         } catch (error) {

@@ -12,15 +12,18 @@ const taskSchema = new mongoose.Schema({
   },
   completed: {
     type: Boolean,
+    required: true,
     default: false
   },
-  visibility: {
+  public: {
     type: Boolean,
+    required: true,
     default: false
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    required: true
   },
 }, { timestamps: true });
 
