@@ -36,6 +36,16 @@ class TaskControllers {
 
     }
 
+    async markTaskAsDone(req, res){
+        try {
+            const task = await tasksService.modifyTaskStatus(req.params.id, req.user._id);
+            return res.status(200).json(task);
+        }
+        catch (error){
+            res.status(400).json({ error: error.message });
+        }
+    }
+
 }
 
 module.exports = TaskControllers;
