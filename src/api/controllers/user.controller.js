@@ -3,7 +3,7 @@ const userService = require("../../service/user.service");
 class UserController {
     async createUser(req, res) {
         try {
-            const {email, password} = req.body;
+            const { email, password } = req.body;
             const newUser = await userService.create(req.body)
             return res.status(201).json({
                 success: true,
@@ -11,7 +11,7 @@ class UserController {
                 data: newUser
             });
         } catch (error) {
-            res.status(500).json({error: error.message});
+            res.status(500).json({ error: error.message });
 
         }
     }
@@ -19,7 +19,7 @@ class UserController {
     async signInUser(req, res) {
         try {
 
-            const {token, user} = await userService.signIn(req.body)
+            const { token, user } = await userService.signIn(req.body)
             return res.status(201).json({
                 success: true,
                 message: 'Sign in successful',
@@ -27,7 +27,17 @@ class UserController {
                 user
             })
         } catch (error) {
-            res.status(500).json({error: error.message});
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+    async findUser(req, res) {
+        try {
+            const user = await userService.updateUserInfo(req.user._id, req.body)
+            return res.status(200).json(user);
+        }
+        catch (error) {
+            res.status(500).json({ error: error.message });
         }
     }
 

@@ -1,17 +1,17 @@
 const usersModel = require("../models/users.model");
 const bcrypt = require('bcrypt')
-const generateToken = require('../utils/generateTokens')
+const generateToken = require('../utils/generateTokens');
+const hashPassowrd = require("../utils/hashPassword");
 
 class UserService {
     async create(userData) {
-        const {email} = userData;
-        let user = await usersModel.findOne({email});
-        if(user){
+        const { email } = userData;
+        let user = await usersModel.findOne({ email });
+        if (user) {
             throw new Error("User Exists")
         }
         try {
-            const saltRound = 10;
-            const hashedPassword = await bcrypt.hash(userData.password, saltRound);
+            const hashedPassword = await hashPassowrd(userData.password)
             const user = new usersModel({ ...userData, password: hashedPassword });
 
             user.save();
@@ -37,14 +37,26 @@ class UserService {
             }
             const token = generateToken(user);
 
-            return{
+            return {
                 token,
-                user:{
+                user: {
                     email
                 }
             }
         } catch (error) {
             throw new Error(`Cannot sign in with the provided credentials ${error}`)
+        }
+    }
+
+    async updateUserInfo(userId, userData) {
+        try {
+            const hashedPassword = await hashPassowrd(userData.password)
+            const updatedUser = await usersModel.findByIdAndUpdate(userId, { ...userData, password: hashedPassword });
+            updatedUser.save()
+            return updatedUser;
+
+        } catch (error) {
+            throw new Error(`Could not update user info ${error}`)
         }
     }
 
